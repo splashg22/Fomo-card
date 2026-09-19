@@ -1,4 +1,4 @@
-"""Mongo connection + tiny shared helpers. Deliberately minimal — FOMO Card doesn't need a
+"""Mongo connection + tiny shared helpers. Deliberately minimal — Social Cash doesn't need a
 receipt/ledger settlement stack, just somewhere to persist users, cards and top-ups."""
 import os
 import uuid
@@ -10,7 +10,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 load_dotenv()
 
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
-DB_NAME = os.environ.get("DB_NAME", "fomocard")
+DB_NAME = os.environ.get("DB_NAME", "socialcash")
 
 client = AsyncIOMotorClient(MONGO_URL)
 db = client[DB_NAME]

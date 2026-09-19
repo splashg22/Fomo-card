@@ -1,5 +1,5 @@
 """fomoapi.io client — resolves a FOMO (fomo.family) handle to its linked Solana + EVM wallets and
-live balances. fomoapi.io is an independent, third-party data API; FOMO Card is not affiliated with
+live balances. fomoapi.io is an independent, third-party data API; Social Cash is not affiliated with
 FOMO Labs. Set FOMOAPI_KEY to hit the real API — without one every call degrades to a deterministic,
 clearly-labelled demo profile so the connect -> load -> spend flow stays runnable end-to-end before
 a real key is issued.

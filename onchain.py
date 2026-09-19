@@ -1,4 +1,4 @@
-"""Best-effort on-chain deposit confirmation for FOMO Card — Solana + EVM, read-only, no custody.
+"""Best-effort on-chain deposit confirmation for Social Cash — Solana + EVM, read-only, no custody.
 
 This only corroborates a user-submitted deposit transaction hash before a top-up is marked funded
 in our own ledger. It never raises: an unreachable or unconfigured RPC degrades to "unknown" rather

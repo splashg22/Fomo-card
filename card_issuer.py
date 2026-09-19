@@ -1,8 +1,8 @@
-"""Card issuer abstraction for FOMO Card.
+"""Card issuer abstraction for Social Cash.
 
-FOMO Card is a branded spend layer on top of an existing no-KYC card program — it does not become a
+Social Cash is a branded spend layer on top of an existing no-KYC card program — it does not become a
 Visa/Mastercard principal member or run its own BIN. Every issuer implements the same `CardIssuer`
-interface so fomocard.py's funding/issuance flow never has to know which one is behind it; switch
+interface so socialcash.py's funding/issuance flow never has to know which one is behind it; switch
 with the CARD_ISSUER env var.
 
 DemoIssuer needs no API key and lets the whole connect -> load -> spend loop run end-to-end locally,
@@ -58,17 +58,17 @@ class CardIssuer(ABC):
 
 class DemoIssuer(CardIssuer):
     """No external calls, no real money movement, no server-side state (safe under multiple workers).
-    Card identity is derived deterministically from the caller's own id; our DB (fomocard_cards) stays
+    Card identity is derived deterministically from the caller's own id; our DB (socialcash_cards) stays
     the source of truth for balance and status, exactly as it would for a real issuer synced by webhook."""
     name = "demo"
 
     async def deposit_address(self, asset: str, chain: str) -> str:
-        seed = f"fomocard-demo-deposit-{asset}-{chain}".encode()
+        seed = f"socialcash-demo-deposit-{asset}-{chain}".encode()
         prefix = "Demo" if chain == "solana" else "0xDEMO"
         return prefix + hashlib.sha256(seed).hexdigest()[:34]
 
     async def create_card(self, external_user_id: str, label: str) -> dict:
-        h = hashlib.sha256(f"fomocard-demo-card-{external_user_id}-{secrets.token_hex(4)}".encode()).hexdigest()
+        h = hashlib.sha256(f"socialcash-demo-card-{external_user_id}-{secrets.token_hex(4)}".encode()).hexdigest()
         digits = "".join(c for c in h if c.isdigit())
         return {
             "issuer_card_id": "demo_" + h[:20],
