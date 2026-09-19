@@ -1,4 +1,4 @@
-"""Integration tests for FOMO Card. Point FOMOCARD_BASE_URL at a running instance
+"""Integration tests for Social Cash. Point FOMOCARD_BASE_URL at a running instance
 (e.g. http://localhost:8000). Assumes DEMO mode (no CRYPTOCARDIUM_API_KEY set), which is the
 default — the demo issuer funds a sandbox card instantly with no real money."""
 import os
@@ -13,21 +13,17 @@ S = requests.Session()
 S.headers.update({"Content-Type": "application/json"})
 
 
-def connect_message(handle: str, address: str) -> str:
-    return f"FOMO Card · link {address} to @{handle}"
-
-
-def signed_connect_body(handle: str) -> dict:
+def fomo_connect_body(handle: str) -> dict:
     acct = Account.create()
     address = acct.address.lower()
-    message = connect_message(handle, address)
+    message = f"Social Cash · link {address} to @{handle} on FOMO"
     signature = acct.sign_message(encode_defunct(text=message)).signature.hex()
     if not signature.startswith("0x"):
         signature = "0x" + signature
-    return {"handle": handle, "address": address, "chain": "evm", "signature": signature}
+    return {"platform": "fomo", "handle": handle, "address": address, "chain": "evm", "signature": signature}
 
 
-class TestFomoCardConfig:
+class TestConfig:
     def test_health(self):
         r = S.get(f"{BASE_URL}/health", timeout=20)
         assert r.status_code == 200, r.text
@@ -36,53 +32,79 @@ class TestFomoCardConfig:
         r = S.get(f"{BASE_URL}/api/config", timeout=20)
         assert r.status_code == 200, r.text
         d = r.json()
-        for k in ("issuer", "demo_mode", "min_topup_usd", "max_topup_usd", "supported_assets", "disclaimer"):
+        for k in ("issuer", "demo_mode", "platforms", "min_topup_usd", "max_topup_usd", "supported_assets", "disclaimer"):
             assert k in d
+        assert set(d["platforms"]) == {"fomo", "pumpfun"}
 
 
-class TestFomoCardConnect:
+class TestFomoConnect:
     def test_connect_requires_valid_signature(self):
-        body = signed_connect_body("TEST_badsig")
+        body = fomo_connect_body("TEST_badsig")
         body["signature"] = body["signature"][:-4] + "dead"
         r = S.post(f"{BASE_URL}/api/connect", json=body, timeout=20)
         assert r.status_code == 401, r.text
 
+    def test_connect_requires_handle(self):
+        acct = Account.create()
+        r = S.post(f"{BASE_URL}/api/connect", json={
+            "platform": "fomo", "handle": "", "address": acct.address, "chain": "evm", "signature": "0x" + "ab" * 65,
+        }, timeout=20)
+        assert r.status_code == 422, r.text
+
     def test_connect_happy_path(self):
-        body = signed_connect_body("TEST_connect")
+        body = fomo_connect_body("TEST_connect")
         r = S.post(f"{BASE_URL}/api/connect", json=body, timeout=20)
         assert r.status_code == 200, r.text
         d = r.json()
-        assert d["user"]["handle"] == "test_connect"
+        assert d["user"]["platform"] == "fomo"
+        assert d["user"]["identity"] == "test_connect"
         assert d["user"]["wallet_address"] == body["address"]
         assert "balances" in d
 
     def test_profile_requires_connect_first(self):
-        r = S.get(f"{BASE_URL}/api/profile", params={"handle": "TEST_never_connected_xyz"}, timeout=20)
+        r = S.get(f"{BASE_URL}/api/profile", params={"platform": "fomo", "identity": "TEST_never_connected_xyz"}, timeout=20)
         assert r.status_code == 404
 
 
-class TestFomoCardTopupAndCard:
+class TestPumpfunConnect:
+    def test_pumpfun_must_be_solana(self):
+        acct = Account.create()
+        r = S.post(f"{BASE_URL}/api/connect", json={
+            "platform": "pumpfun", "address": acct.address, "chain": "evm", "signature": "0x" + "ab" * 65,
+        }, timeout=20)
+        assert r.status_code == 422, r.text
+
+    def test_pumpfun_connect_rejects_bad_signature(self):
+        # A syntactically-plausible but wrong signature/address pair should be rejected, not accepted.
+        r = S.post(f"{BASE_URL}/api/connect", json={
+            "platform": "pumpfun", "address": "11111111111111111111111111111111", "chain": "solana",
+            "signature": "0x" + "00" * 64,
+        }, timeout=20)
+        assert r.status_code in (400, 401), r.text
+
+
+class TestTopupAndCard:
     handle = "TEST_topupflow"
 
     @classmethod
     def setup_class(cls):
-        body = signed_connect_body(cls.handle)
+        body = fomo_connect_body(cls.handle)
         r = S.post(f"{BASE_URL}/api/connect", json=body, timeout=20)
         assert r.status_code == 200, r.text
 
     def test_topup_amount_bounds(self):
         r = S.post(f"{BASE_URL}/api/topups",
-                   json={"handle": self.handle, "amount_usd": 5000, "asset": "USDC", "chain": "evm"}, timeout=20)
+                   json={"platform": "fomo", "identity": self.handle, "amount_usd": 5000, "asset": "USDC", "chain": "evm"}, timeout=20)
         assert r.status_code == 422, r.text
 
     def test_topup_unsupported_asset(self):
         r = S.post(f"{BASE_URL}/api/topups",
-                   json={"handle": self.handle, "amount_usd": 50, "asset": "DOGE", "chain": "evm"}, timeout=20)
+                   json={"platform": "fomo", "identity": self.handle, "amount_usd": 50, "asset": "DOGE", "chain": "evm"}, timeout=20)
         assert r.status_code == 422, r.text
 
     def test_topup_confirm_and_card_funded(self):
         r = S.post(f"{BASE_URL}/api/topups",
-                   json={"handle": self.handle, "amount_usd": 50, "asset": "USDC", "chain": "evm"}, timeout=20)
+                   json={"platform": "fomo", "identity": self.handle, "amount_usd": 50, "asset": "USDC", "chain": "evm"}, timeout=20)
         assert r.status_code == 200, r.text
         topup = r.json()["topup"]
         assert topup["status"] == "pending_deposit"
@@ -102,37 +124,38 @@ class TestFomoCardTopupAndCard:
         assert c2.status_code == 200
         assert c2.json().get("already_funded") is True
 
-        cards = S.get(f"{BASE_URL}/api/cards", params={"handle": self.handle}, timeout=20)
+        cards = S.get(f"{BASE_URL}/api/cards", params={"platform": "fomo", "identity": self.handle}, timeout=20)
         assert cards.status_code == 200
         assert len(cards.json()["cards"]) >= 1
 
     def test_reveal_is_rate_limited(self):
-        cards = S.get(f"{BASE_URL}/api/cards", params={"handle": self.handle}, timeout=20).json()["cards"]
+        cards = S.get(f"{BASE_URL}/api/cards", params={"platform": "fomo", "identity": self.handle}, timeout=20).json()["cards"]
         assert cards, "expected a funded card from the previous test"
         cid = cards[0]["issuer_card_id"]
         codes = []
         for _ in range(5):
-            r = S.post(f"{BASE_URL}/api/cards/{cid}/reveal", json={"handle": self.handle}, timeout=20)
+            r = S.post(f"{BASE_URL}/api/cards/{cid}/reveal", json={"platform": "fomo", "identity": self.handle}, timeout=20)
             codes.append(r.status_code)
         assert 429 in codes, f"expected a 429 among {codes}"
 
     def test_freeze_unfreeze(self):
-        cards = S.get(f"{BASE_URL}/api/cards", params={"handle": self.handle}, timeout=20).json()["cards"]
+        cards = S.get(f"{BASE_URL}/api/cards", params={"platform": "fomo", "identity": self.handle}, timeout=20).json()["cards"]
         cid = cards[0]["issuer_card_id"]
-        f = S.post(f"{BASE_URL}/api/cards/{cid}/freeze", json={"handle": self.handle}, timeout=20)
+        f = S.post(f"{BASE_URL}/api/cards/{cid}/freeze", json={"platform": "fomo", "identity": self.handle}, timeout=20)
         assert f.status_code == 200 and f.json()["status"] == "frozen"
-        u = S.post(f"{BASE_URL}/api/cards/{cid}/unfreeze", json={"handle": self.handle}, timeout=20)
+        u = S.post(f"{BASE_URL}/api/cards/{cid}/unfreeze", json={"platform": "fomo", "identity": self.handle}, timeout=20)
         assert u.status_code == 200 and u.json()["status"] == "active"
 
     def test_history(self):
-        r = S.get(f"{BASE_URL}/api/topups", params={"handle": self.handle}, timeout=20)
+        r = S.get(f"{BASE_URL}/api/topups", params={"platform": "fomo", "identity": self.handle}, timeout=20)
         assert r.status_code == 200
         assert any(t["status"] == "funded" for t in r.json()["topups"])
 
 
-class TestFomoCardSite:
+class TestSite:
     def test_site_page(self):
         r = S.get(f"{BASE_URL}/", timeout=30)
         assert r.status_code == 200
-        assert "FOMO Card" in r.text
-        assert "not affiliated with FOMO Labs" in r.text
+        assert "Social Cash" in r.text
+        assert "not affiliated with FOMO Labs or Pump.fun" in r.text
+        assert "Pump.fun wallet" in r.text and "FOMO account" in r.text
