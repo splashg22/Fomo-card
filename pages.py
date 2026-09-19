@@ -1,4 +1,4 @@
-"""FOMO CARD — the whole standalone site. Dark, neon, built for the fomo.family crowd. Unofficial.
+"""FOMO CARD — the whole standalone site. Dark, quiet, built for the fomo.family crowd. Unofficial.
 
 No React host here (unlike the version of this product that briefly lived inside a bigger multi-
 product stack) — htmx is loaded straight from a CDN and a small inline script handles the one thing
@@ -26,26 +26,25 @@ def err_text(e) -> str:
 
 CSS = """
 <style>
-#fc{--bg:#0a0a0f;--bg2:#111119;--card:#15151f;--ink:#f4f4f8;--ink2:#a5a5b8;--ink3:#63637a;--line:#26263a;
---lime:#c6ff3d;--pink:#ff3da6;--bad:#ff5470;--good:#3dffb0;
---head:"Space Grotesk","Archivo",sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--sans:Inter,-apple-system,system-ui,sans-serif;
+#fc{--bg:#111214;--bg2:#17181b;--card:#1a1b1e;--ink:#e7e7ea;--ink2:#96979c;--ink3:#68696e;--line:#2a2b2f;
+--accent:#8a9a90;--bad:#b97575;--good:#7f9e88;
+--head:"Archivo","Space Grotesk",sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--sans:Inter,-apple-system,system-ui,sans-serif;
 background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;min-height:100vh}
 #fc *{box-sizing:border-box}
-#fc ::selection{background:var(--lime);color:#0a0a0f}
-#fc a{color:var(--lime);text-decoration:none}
+#fc ::selection{background:var(--accent);color:#111214}
+#fc a{color:var(--accent);text-decoration:none}
 #fc .w{max-width:1080px;margin:0 auto;padding:0 24px}
-#fc .glow{position:fixed;inset:0;pointer-events:none;background:radial-gradient(600px 300px at 15% -5%,rgba(198,255,61,.14),transparent),radial-gradient(500px 260px at 100% 10%,rgba(255,61,166,.12),transparent);z-index:0}
-#fc .bar{position:sticky;top:0;z-index:40;background:rgba(10,10,15,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+#fc .bar{position:sticky;top:0;z-index:40;background:rgba(17,18,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 #fc .bar-in{display:flex;align-items:center;gap:20px;padding:16px 24px;max-width:1200px;margin:0 auto}
-#fc .mk{font-family:var(--head);font-weight:700;font-size:20px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
-#fc .mk i{width:26px;height:26px;background:linear-gradient(135deg,var(--lime),var(--pink));border-radius:7px;display:grid;place-items:center;font-size:13px;font-weight:800;color:#0a0a0f}
+#fc .mk{font-family:var(--head);font-weight:600;font-size:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;color:var(--ink)}
+#fc .mk i{width:24px;height:24px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--ink2);font-style:normal}
 #fc .right{margin-left:auto}
 #fc .badge{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:var(--bg2)}
-#fc section{padding:64px 0;position:relative;z-index:1}
-#fc .kick{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
-#fc h1{font-family:var(--head);font-size:clamp(40px,7vw,80px);line-height:.98;margin:16px 0 0;font-weight:700;letter-spacing:-.03em}
-#fc h1 em{font-style:normal;color:var(--lime)}
-#fc h2{font-family:var(--head);font-size:clamp(26px,3.4vw,38px);margin:0 0 20px;font-weight:700;letter-spacing:-.02em}
+#fc section{padding:56px 0;position:relative;z-index:1}
+#fc .kick{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+#fc h1{font-family:var(--head);font-size:clamp(30px,4.4vw,48px);line-height:1.08;margin:14px 0 0;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+#fc h1 em{font-style:normal;color:var(--ink)}
+#fc h2{font-family:var(--head);font-size:clamp(22px,2.6vw,28px);margin:0 0 20px;font-weight:600;letter-spacing:-.01em}
 #fc p.lede{color:var(--ink2);max-width:56ch;margin:18px 0 0;font-size:17px;line-height:1.65}
 #fc .grid{display:grid;gap:20px}
 @media(min-width:900px){#fc .g2{grid-template-columns:1fr 1fr}#fc .g3{grid-template-columns:repeat(3,1fr)}}
@@ -56,46 +55,44 @@ background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;lin
 #fc label{display:block;margin-top:12px}
 #fc label span{font-size:12px;font-weight:600;color:var(--ink2)}
 #fc input,#fc select{width:100%;margin-top:6px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-family:var(--mono);font-size:14px;padding:11px 12px;outline:none}
-#fc input:focus,#fc select:focus{border-color:var(--lime)}
+#fc input:focus,#fc select:focus{border-color:var(--accent)}
 #fc .hint{font-size:13px;color:var(--ink3);margin-top:8px;line-height:1.6}
-#fc .btn{font-family:var(--head);font-weight:700;font-size:14px;padding:12px 18px;border-radius:10px;border:1px solid transparent;background:var(--lime);color:#0a0a0f;cursor:pointer;transition:transform .08s,opacity .15s}
-#fc .btn:hover{opacity:.9}
-#fc .btn:active{transform:scale(.98)}
+#fc .btn{font-family:var(--head);font-weight:600;font-size:14px;padding:11px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#12130f;cursor:pointer;transition:opacity .15s}
+#fc .btn:hover{opacity:.88}
+#fc .btn:active{opacity:.75}
 #fc .btn.o{background:transparent;border-color:var(--line);color:var(--ink)}
-#fc .btn.pink{background:var(--pink);color:#0a0a0f}
-#fc .btn.sm{padding:8px 12px;font-size:12px}
+#fc .btn.sm{padding:7px 12px;font-size:12px}
 #fc .btn[disabled]{opacity:.4;cursor:default}
 #fc .amts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 #fc .amts label{margin:0;flex:1;min-width:64px}
 #fc .amts input{display:none}
-#fc .amts span{display:block;text-align:center;border:1px solid var(--line);border-radius:10px;padding:9px;font-family:var(--mono);font-weight:600;cursor:pointer;background:var(--bg2)}
-#fc .amts input:checked+span{background:var(--lime);color:#0a0a0f;border-color:var(--lime)}
+#fc .amts span{display:block;text-align:center;border:1px solid var(--line);border-radius:8px;padding:9px;font-family:var(--mono);font-weight:600;cursor:pointer;background:var(--bg2);color:var(--ink2)}
+#fc .amts input:checked+span{background:var(--bg2);color:var(--ink);border-color:var(--accent)}
 #fc table{width:100%;border-collapse:collapse;font-size:13px;font-family:var(--mono)}
 #fc th{text-align:left;font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
 #fc td{padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap;color:var(--ink2)}
 #fc tbody tr:last-child td{border-bottom:0}
-#fc .tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-family:var(--mono);font-size:11px;background:var(--bg2)}
-#fc .panel{border:1px solid var(--line);border-radius:14px;background:var(--bg2);padding:20px}
-#fc .panel.go{border-color:var(--good);background:rgba(61,255,176,.06)}
-#fc .panel.stop{border-color:var(--bad);background:rgba(255,84,112,.06)}
-#fc .panel.warn{border-color:var(--pink);background:rgba(255,61,166,.06)}
-#fc .panel .big{font-family:var(--head);font-weight:700;font-size:22px;letter-spacing:-.02em}
+#fc .tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-family:var(--mono);font-size:11px;background:var(--bg2);color:var(--ink2)}
+#fc .panel{border:1px solid var(--line);border-radius:12px;background:var(--bg2);padding:20px}
+#fc .panel.go{border-color:var(--good)}
+#fc .panel.stop{border-color:var(--bad)}
+#fc .panel.warn{border-color:var(--ink3)}
+#fc .panel .big{font-family:var(--head);font-weight:600;font-size:19px;letter-spacing:-.01em}
 #fc pre{margin:10px 0 0;font-family:var(--mono);font-size:12px;line-height:1.7;white-space:pre-wrap;word-break:break-word;color:var(--ink2);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;max-height:260px;overflow:auto}
-#fc .cc{border-radius:16px;padding:22px;background:linear-gradient(135deg,#1a1a28,#0d0d14);border:1px solid var(--line);position:relative;overflow:hidden;max-width:360px}
-#fc .cc:before{content:"";position:absolute;inset:0;background:radial-gradient(200px 100px at 90% 0%,rgba(198,255,61,.15),transparent)}
-#fc .cc .brand{font-family:var(--head);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--lime);position:relative}
-#fc .cc .pan{font-family:var(--mono);font-size:20px;letter-spacing:.12em;margin-top:34px;position:relative}
-#fc .cc .row{display:flex;justify-content:space-between;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--ink2);position:relative}
+#fc .cc{border-radius:14px;padding:22px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden;max-width:360px}
+#fc .cc .brand{font-family:var(--head);font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+#fc .cc .pan{font-family:var(--mono);font-size:20px;letter-spacing:.12em;margin-top:34px;color:var(--ink)}
+#fc .cc .row{display:flex;justify-content:space-between;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--ink2)}
 #fc .steps{display:grid;gap:20px;margin-top:26px}
 @media(min-width:900px){#fc .steps{grid-template-columns:repeat(3,1fr)}}
-#fc .step{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:20px}
-#fc .step .n{font-family:var(--head);font-weight:700;font-size:28px;color:var(--pink)}
-#fc .step .t{font-family:var(--head);font-size:18px;font-weight:700;margin-top:10px}
+#fc .step{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:20px}
+#fc .step .n{font-family:var(--head);font-weight:600;font-size:22px;color:var(--ink3)}
+#fc .step .t{font-family:var(--head);font-size:16px;font-weight:600;margin-top:10px}
 #fc .step .d{color:var(--ink2);font-size:14px;line-height:1.6;margin-top:6px}
 #fc details{border-bottom:1px solid var(--line)}
-#fc summary{padding:16px 2px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:14px;font-family:var(--head);font-size:17px;font-weight:700}
+#fc summary{padding:16px 2px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:14px;font-family:var(--head);font-size:16px;font-weight:600}
 #fc summary::-webkit-details-marker{display:none}
-#fc summary:after{content:"+";color:var(--lime)}
+#fc summary:after{content:"+";color:var(--ink3)}
 #fc details[open] summary:after{content:"–"}
 #fc details p{margin:0;padding:0 2px 18px;color:var(--ink2);font-size:14px;line-height:1.7;max-width:68ch}
 #fc footer{padding:32px 0 56px;color:var(--ink3);font-size:13px;border-top:1px solid var(--line);position:relative;z-index:1}
@@ -203,7 +200,7 @@ def _connect_html() -> str:
   <input type="hidden" name="fomo_address"><input type="hidden" name="fomo_chain"><input type="hidden" name="fomo_signature">
   <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
     <button class="btn" type="button" data-fomo-connect="evm" data-testid="fomocard-connect-evm">Connect EVM wallet</button>
-    <button class="btn pink" type="button" data-fomo-connect="solana" data-testid="fomocard-connect-solana">Connect Phantom (Solana)</button>
+    <button class="btn o" type="button" data-fomo-connect="solana" data-testid="fomocard-connect-solana">Connect Phantom (Solana)</button>
   </div>
   <p class="hint" data-fomo-status data-testid="fomocard-connect-status">Signs one message proving you own the wallet linked to your FOMO handle — no funds move, no approval needed.</p>
 </form>
@@ -296,25 +293,25 @@ async def health():
 async def page():
     faq = "".join(f'<details{" open" if i == 0 else ""}><summary>{q}</summary><p>{a}</p></details>' for i, (q, a) in enumerate(FAQ))
     return HTMLResponse(f"""{CSS}
-<div id="fc"><div class="glow"></div>
+<div id="fc">
 {_bar()}
-<section style="padding-top:56px"><div class="w"><div class="grid" style="grid-template-columns:1fr;gap:40px">
+<section style="padding-top:48px"><div class="w"><div class="grid" style="grid-template-columns:1fr;gap:32px">
   <div>
-    <span class="kick">FOMO Card · unofficial spend layer for fomo.family</span>
-    <h1>Spend your bag<br><em>IRL.</em></h1>
-    <p class="lede">Connect your FOMO handle, load a virtual card straight from your linked Solana or EVM wallet, and tap to pay — McDonald's, anywhere Apple Pay or Google Pay works. No KYC on the starter tier.</p>
+    <span class="kick">FOMO Card</span>
+    <h1>A card for your FOMO balance.</h1>
+    <p class="lede">Connect your FOMO wallet, move some balance onto a card, and spend it — online or with Apple Pay / Google Pay. No KYC on the starter tier.</p>
   </div>
   <div id="fc-app" data-testid="fomocard-app">{_connect_html()}</div>
 </div></div></section>
 
-<section id="how"><div class="w"><span class="kick">How it works</span><h2>Three moves, no custody.</h2>
+<section id="how"><div class="w"><span class="kick">How it works</span><h2>Three steps.</h2>
   <div class="steps">
-    <div class="step"><div class="n">1</div><div class="t">Connect</div><div class="d">Sign one message with the wallet linked to your FOMO handle. We resolve your handle through fomoapi.io and read your live balances.</div></div>
+    <div class="step"><div class="n">1</div><div class="t">Connect</div><div class="d">Sign one message with the wallet linked to your FOMO handle. We resolve your handle through fomoapi.io and read your balances.</div></div>
     <div class="step"><div class="n">2</div><div class="t">Load</div><div class="d">Pick an amount and send USDC/SOL/USDT straight to the card issuer's deposit address — never to us. We watch for confirmation.</div></div>
     <div class="step"><div class="n">3</div><div class="t">Spend</div><div class="d">Once it lands, your card is funded. Add it to Apple Pay or Google Pay, or use the number online. Real limits apply on the no-KYC tier.</div></div>
   </div></div></section>
 
-<section id="faq"><div class="w"><span class="kick">FAQ</span><h2>Fair questions.</h2><div style="margin-top:18px;border-top:1px solid var(--line)">{faq}</div></div></section>
+<section id="faq"><div class="w"><span class="kick">FAQ</span><h2>Questions</h2><div style="margin-top:18px;border-top:1px solid var(--line)">{faq}</div></div></section>
 
 <footer><div class="w"><div>FOMO Card · an independent product for fomo.family traders</div>
 <div class="ln"><a href="https://github.com/splashg22/fomo-card" target="_blank" rel="noreferrer">Source on GitHub</a>
