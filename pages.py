@@ -30,90 +30,130 @@ def short(addr: str) -> str:
 
 
 CSS = """
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
 <style>
-#sc{--bg:#0b0c0a;--bg2:#141613;--card:#171915;--ink:#eef1ec;--ink2:#9aa39c;--ink3:#666e68;--line:#262a24;
---pump:#00e676;--fomo:#ff5a36;--accent:var(--pump);--bad:#ff5c5c;--good:var(--pump);
---head:"Archivo","Space Grotesk",sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--sans:Inter,-apple-system,system-ui,sans-serif;
-background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;min-height:100vh}
+#sc{--bg:#08080d;--bg2:#111018;--card:rgba(255,255,255,.035);--cardline:rgba(255,255,255,.09);
+--ink:#f4f4f8;--ink2:#9a9aa8;--ink3:#63636f;
+--accent:#6d6ef7;--accent2:#8f8ffa;--pump:#00e676;--fomo:#ff6a3d;--bad:#ff5c6c;--good:#00e676;
+--head:"Plus Jakarta Sans","Archivo",sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--sans:Inter,-apple-system,system-ui,sans-serif;
+background:
+  radial-gradient(1100px 560px at 12% -12%,rgba(109,110,247,.16),transparent),
+  radial-gradient(900px 480px at 105% 4%,rgba(0,230,118,.08),transparent),
+  var(--bg);
+color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;min-height:100vh}
 #sc *{box-sizing:border-box}
-#sc ::selection{background:var(--pump);color:#0b0c0a}
-#sc a{color:var(--pump);text-decoration:none}
+#sc ::selection{background:var(--accent);color:#fff}
+#sc a{color:var(--accent2);text-decoration:none}
 #sc .w{max-width:1080px;margin:0 auto;padding:0 24px}
-#sc .bar{position:sticky;top:0;z-index:40;background:rgba(11,12,10,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-#sc .bar-in{display:flex;align-items:center;gap:20px;padding:16px 24px;max-width:1200px;margin:0 auto}
-#sc .mk{font-family:var(--head);font-weight:700;font-size:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;color:var(--ink)}
-#sc .mk i{width:26px;height:26px;background:linear-gradient(135deg,var(--pump),var(--fomo));border-radius:7px;display:grid;place-items:center;font-size:12px;font-weight:800;color:#0b0c0a;font-style:normal}
-#sc .right{margin-left:auto}
-#sc .badge{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:var(--bg2)}
-#sc section{padding:56px 0;position:relative;z-index:1}
-#sc .kick{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
-#sc .platforms{display:inline-flex;gap:8px;margin-top:14px}
-#sc .ptag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;border:1px solid;border-radius:999px;padding:4px 11px;font-weight:600}
-#sc .ptag.fomo{color:var(--fomo);border-color:var(--fomo)}
-#sc .ptag.pump{color:var(--pump);border-color:var(--pump)}
-#sc h1{font-family:var(--head);font-size:clamp(30px,4.4vw,48px);line-height:1.08;margin:14px 0 0;font-weight:700;letter-spacing:-.015em;color:var(--ink)}
-#sc h2{font-family:var(--head);font-size:clamp(22px,2.6vw,28px);margin:0 0 20px;font-weight:700;letter-spacing:-.01em}
-#sc p.lede{color:var(--ink2);max-width:56ch;margin:18px 0 0;font-size:17px;line-height:1.65}
+#sc .bar{position:sticky;top:0;z-index:40;background:rgba(8,8,13,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--cardline)}
+#sc .bar-in{display:flex;align-items:center;gap:16px;padding:14px 24px;max-width:1200px;margin:0 auto}
+#sc .mk{font-family:var(--head);font-weight:800;font-size:17px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;color:var(--ink)}
+#sc .mk i{width:26px;height:26px;background:linear-gradient(135deg,var(--accent),var(--pump));border-radius:9px;display:grid;place-items:center;font-size:12px;font-weight:800;color:#0a0a10;font-style:normal}
+#sc .right{margin-left:auto;display:flex;align-items:center;gap:12px}
+#sc .badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--ink3);border:1px solid var(--cardline);border-radius:999px;padding:5px 12px;background:var(--bg2);display:none}
+@media(min-width:720px){#sc .badge{display:inline-block}}
+#sc section{padding:52px 0;position:relative;z-index:1}
+#sc .kick{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
+#sc .platforms{display:inline-flex;gap:8px;margin-top:16px}
+#sc .ptag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;border:1px solid;border-radius:999px;padding:4px 11px;font-weight:600}
+#sc .ptag.fomo{color:var(--fomo);border-color:color-mix(in srgb,var(--fomo) 45%,transparent)}
+#sc .ptag.pump{color:var(--pump);border-color:color-mix(in srgb,var(--pump) 45%,transparent)}
+#sc h1{font-family:var(--head);font-size:clamp(32px,5vw,54px);line-height:1.05;margin:16px 0 0;font-weight:800;letter-spacing:-.02em;color:var(--ink);text-wrap:balance}
+#sc h1 em{font-style:normal;color:var(--accent2)}
+#sc h2{font-family:var(--head);font-size:clamp(23px,2.8vw,30px);margin:0 0 8px;font-weight:800;letter-spacing:-.015em}
+#sc p.lede{color:var(--ink2);max-width:52ch;margin:16px 0 0;font-size:17px;line-height:1.65}
+#sc .stats{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px}
+#sc .stats span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding-left:14px;border-left:2px solid var(--cardline)}
 #sc .grid{display:grid;gap:20px}
 @media(min-width:900px){#sc .g2{grid-template-columns:1fr 1fr}#sc .g3{grid-template-columns:repeat(3,1fr)}}
-#sc .card{border:1px solid var(--line);border-top:3px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
-#sc .card.fomo{border-top-color:var(--fomo)}
-#sc .card.pump{border-top-color:var(--pump)}
-#sc .card>header{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+#sc .card{border:1px solid var(--cardline);border-radius:20px;background:var(--card);backdrop-filter:blur(6px);overflow:hidden}
+#sc .card>header{padding:16px 20px;border-bottom:1px solid var(--cardline);display:flex;justify-content:space-between;align-items:center;gap:10px}
 #sc .card>header h3{margin:0;font-family:var(--head);font-size:15px;font-weight:700}
-#sc .card .body{padding:18px}
+#sc .card .body{padding:20px}
 #sc label{display:block;margin-top:12px}
 #sc label span{font-size:12px;font-weight:600;color:var(--ink2)}
-#sc input,#sc select{width:100%;margin-top:6px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-family:var(--mono);font-size:14px;padding:11px 12px;outline:none}
+#sc input,#sc select{width:100%;margin-top:6px;background:var(--bg2);border:1px solid var(--cardline);border-radius:12px;color:var(--ink);font-family:var(--mono);font-size:14px;padding:12px 14px;outline:none}
 #sc input:focus,#sc select:focus{border-color:var(--accent)}
 #sc .hint{font-size:13px;color:var(--ink3);margin-top:8px;line-height:1.6}
-#sc .btn{font-family:var(--head);font-weight:700;font-size:14px;padding:11px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#0b0c0a;cursor:pointer;transition:opacity .15s,transform .1s}
-#sc .btn:hover{opacity:.88}
-#sc .btn:active{opacity:.75;transform:scale(.98)}
-#sc .btn.o{background:transparent;border-color:var(--line);color:var(--ink)}
-#sc .btn.fomo{background:var(--fomo);border-color:var(--fomo);color:#1a0800}
-#sc .btn.fomo.o{background:transparent;color:var(--fomo)}
-#sc .btn.pump{background:var(--pump);border-color:var(--pump);color:#04140a}
-#sc .btn.pump.o{background:transparent;color:var(--pump)}
-#sc .btn.sm{padding:7px 12px;font-size:12px}
+#sc .btn{font-family:var(--head);font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 10px 26px -10px rgba(109,110,247,.65);transition:opacity .15s,transform .1s}
+#sc .btn:hover{opacity:.9}
+#sc .btn:active{opacity:.8;transform:scale(.98)}
+#sc .btn.o{background:transparent;border-color:var(--cardline);color:var(--ink);box-shadow:none}
+#sc .btn.fomo{background:var(--fomo);border-color:var(--fomo);color:#1a0800;box-shadow:0 10px 26px -10px rgba(255,106,61,.55)}
+#sc .btn.fomo.o{background:transparent;color:var(--fomo);box-shadow:none}
+#sc .btn.pump{background:var(--pump);border-color:var(--pump);color:#03150c;box-shadow:0 10px 26px -10px rgba(0,230,118,.55)}
+#sc .btn.pump.o{background:transparent;color:var(--pump);box-shadow:none}
+#sc .btn.full{width:100%;display:block;text-align:center;padding:15px 20px;font-size:15px}
+#sc .btn.sm{padding:8px 14px;font-size:12px;box-shadow:none}
 #sc .btn[disabled]{opacity:.4;cursor:default}
+#sc .tabs{display:flex;gap:8px;margin-bottom:16px;background:var(--bg2);border:1px solid var(--cardline);border-radius:999px;padding:4px}
+#sc .tabpick{position:absolute;opacity:0;pointer-events:none}
+#sc .tabs label{flex:1;text-align:center;padding:9px 10px;border-radius:999px;font-family:var(--head);font-weight:700;font-size:13px;color:var(--ink3);cursor:pointer;transition:background .15s,color .15s}
+#sc #tab-fomo:checked~.tabs label[for=tab-fomo]{background:var(--fomo);color:#1a0800}
+#sc #tab-pump:checked~.tabs label[for=tab-pump]{background:var(--pump);color:#03150c}
+#sc .tabpane{display:none}
+#sc #tab-fomo:checked~.tabpane.fomo{display:block}
+#sc #tab-pump:checked~.tabpane.pump{display:block}
 #sc .amts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 #sc .amts label{margin:0;flex:1;min-width:64px}
 #sc .amts input{display:none}
-#sc .amts span{display:block;text-align:center;border:1px solid var(--line);border-radius:8px;padding:9px;font-family:var(--mono);font-weight:600;cursor:pointer;background:var(--bg2);color:var(--ink2)}
-#sc .amts input:checked+span{background:var(--bg2);color:var(--ink);border-color:var(--accent)}
+#sc .amts span{display:block;text-align:center;border:1px solid var(--cardline);border-radius:999px;padding:9px;font-family:var(--mono);font-weight:600;cursor:pointer;background:var(--bg2);color:var(--ink2)}
+#sc .amts input:checked+span{background:var(--accent);color:#fff;border-color:var(--accent)}
 #sc table{width:100%;border-collapse:collapse;font-size:13px;font-family:var(--mono)}
-#sc th{text-align:left;font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
-#sc td{padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap;color:var(--ink2)}
+#sc th{text-align:left;font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);padding:10px 14px;border-bottom:1px solid var(--cardline);white-space:nowrap}
+#sc td{padding:11px 14px;border-bottom:1px solid var(--cardline);white-space:nowrap;color:var(--ink2)}
 #sc tbody tr:last-child td{border-bottom:0}
-#sc .tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-family:var(--mono);font-size:11px;background:var(--bg2);color:var(--ink2)}
-#sc .panel{border:1px solid var(--line);border-radius:12px;background:var(--bg2);padding:20px}
+#sc .tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--cardline);border-radius:999px;padding:3px 10px;font-family:var(--mono);font-size:11px;background:var(--bg2);color:var(--ink2)}
+#sc .panel{border:1px solid var(--cardline);border-radius:16px;background:var(--bg2);padding:20px}
 #sc .panel.go{border-color:var(--good)}
 #sc .panel.stop{border-color:var(--bad)}
 #sc .panel.warn{border-color:var(--ink3)}
-#sc .panel .big{font-family:var(--head);font-weight:600;font-size:19px;letter-spacing:-.01em}
-#sc pre{margin:10px 0 0;font-family:var(--mono);font-size:12px;line-height:1.7;white-space:pre-wrap;word-break:break-word;color:var(--ink2);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;max-height:260px;overflow:auto}
-#sc .cc{border-radius:14px;padding:22px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden;max-width:360px}
-#sc .cc:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--fomo),var(--pump))}
-#sc .cc .brand{font-family:var(--head);font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
-#sc .cc .pan{font-family:var(--mono);font-size:20px;letter-spacing:.12em;margin-top:34px;color:var(--ink)}
+#sc .panel .big{font-family:var(--head);font-weight:700;font-size:19px;letter-spacing:-.01em}
+#sc pre{margin:10px 0 0;font-family:var(--mono);font-size:12px;line-height:1.7;white-space:pre-wrap;word-break:break-word;color:var(--ink2);background:var(--bg);border:1px solid var(--cardline);border-radius:10px;padding:12px;max-height:260px;overflow:auto}
+#sc .cc{border-radius:18px;padding:22px;background:linear-gradient(155deg,#15141f,#0b0b12);border:1px solid var(--cardline);position:relative;overflow:hidden;max-width:340px}
+#sc .cc:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--fomo),var(--accent),var(--pump))}
+#sc .cc .brand{font-family:var(--head);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+#sc .cc .pan{font-family:var(--mono);font-size:19px;letter-spacing:.1em;margin-top:32px;color:var(--ink)}
 #sc .cc .row{display:flex;justify-content:space-between;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--ink2)}
-#sc .steps{display:grid;gap:20px;margin-top:26px}
-@media(min-width:900px){#sc .steps{grid-template-columns:repeat(3,1fr)}}
-#sc .step{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:20px}
-#sc .step .n{font-family:var(--head);font-weight:600;font-size:22px;color:var(--ink3)}
-#sc .step .t{font-family:var(--head);font-size:16px;font-weight:600;margin-top:10px}
-#sc .step .d{color:var(--ink2);font-size:14px;line-height:1.6;margin-top:6px}
-#sc details{border-bottom:1px solid var(--line)}
-#sc summary{padding:16px 2px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:14px;font-family:var(--head);font-size:16px;font-weight:600}
+#sc .sim{display:flex;align-items:center;gap:14px;margin-top:18px}
+#sc .sim .arrow{color:var(--ink3);font-size:18px}
+#sc .sim .merch{width:52px;height:52px;border-radius:14px;background:var(--bg2);border:1px solid var(--cardline);display:grid;place-items:center;font-size:22px}
+#sc .sim .lbl{font-family:var(--mono);font-size:10px;color:var(--ink3);text-align:center;margin-top:6px;letter-spacing:.05em;text-transform:uppercase}
+#sc .steps{display:grid;gap:18px;margin-top:26px}
+@media(min-width:760px){#sc .steps{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){#sc .steps{grid-template-columns:repeat(4,1fr)}}
+#sc .step{border:1px solid var(--cardline);border-radius:18px;background:var(--card);padding:22px;position:relative}
+#sc .step .go-arrow{position:absolute;top:18px;right:18px;color:var(--ink3);font-size:15px}
+#sc .step .n{font-family:var(--head);font-weight:800;font-size:32px;color:var(--cardline);-webkit-text-stroke:1px var(--ink3)}
+#sc .step .t{font-family:var(--head);font-size:16px;font-weight:700;margin-top:14px}
+#sc .step .d{color:var(--ink2);font-size:13.5px;line-height:1.6;margin-top:6px}
+#sc .compare{display:grid;gap:0;border:1px solid var(--cardline);border-radius:20px;overflow:hidden;margin-top:24px}
+@media(min-width:760px){#sc .compare{grid-template-columns:1fr 1fr}}
+#sc .compare>div{padding:26px}
+#sc .compare .old{background:var(--bg2)}
+#sc .compare .old .kick{color:var(--ink3)}
+#sc .compare .flowline{font-family:var(--mono);font-size:14px;color:var(--ink3);text-decoration:line-through;text-decoration-color:var(--bad);margin-top:10px}
+#sc .compare .oldmeta{font-family:var(--mono);font-size:12px;color:var(--ink3);margin-top:14px}
+#sc .compare .new{background:linear-gradient(155deg,rgba(109,110,247,.14),rgba(0,230,118,.06))}
+#sc .compare .new .kick{color:var(--accent2)}
+#sc .compare .flowbig{font-family:var(--head);font-weight:800;font-size:26px;margin-top:10px}
+#sc .compare .flowbig em{font-style:normal;color:var(--accent2)}
+#sc .compare .newmeta{font-family:var(--mono);font-size:12px;color:var(--ink2);margin-top:14px}
+#sc .ticker{border:1px solid var(--cardline);border-radius:999px;background:var(--bg2);padding:14px 22px;margin-top:24px;overflow-x:auto;white-space:nowrap;font-family:var(--mono);font-size:12.5px;color:var(--ink2)}
+#sc .ticker b{color:var(--ink)}
+#sc .ticker .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin:0 14px;vertical-align:middle}
+#sc .merchants{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+#sc .mchip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--cardline);border-radius:999px;padding:8px 14px;background:var(--card);font-size:13px;color:var(--ink2)}
+#sc details{border-bottom:1px solid var(--cardline)}
+#sc summary{padding:16px 2px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:14px;font-family:var(--head);font-size:16px;font-weight:700}
 #sc summary::-webkit-details-marker{display:none}
-#sc summary:after{content:"+";color:var(--ink3)}
+#sc summary:after{content:"+";color:var(--accent2)}
 #sc details[open] summary:after{content:"–"}
 #sc details p{margin:0;padding:0 2px 18px;color:var(--ink2);font-size:14px;line-height:1.7;max-width:68ch}
-#sc footer{padding:32px 0 56px;color:var(--ink3);font-size:13px;border-top:1px solid var(--line);position:relative;z-index:1}
+#sc footer{padding:32px 0 56px;color:var(--ink3);font-size:13px;border-top:1px solid var(--cardline);position:relative;z-index:1}
 #sc footer .ln{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
 #sc footer a{color:var(--ink2)}
-#sc .disclaimer{font-size:12px;color:var(--ink3);line-height:1.7;max-width:70ch;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+#sc .disclaimer{font-size:12px;color:var(--ink3);line-height:1.7;max-width:70ch;margin-top:14px;padding-top:14px;border-top:1px solid var(--cardline)}
 #sc [data-pending="1"]{opacity:.5}
 #sc .flash{animation:sc-in .25s ease}
 @keyframes sc-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -212,41 +252,44 @@ def _bar() -> str:
 <header class="bar"><div class="bar-in">
   <a class="mk" href="/" data-testid="brand-home-link"><i>S</i>SOCIAL CASH</a>
   <span class="badge">unofficial · not affiliated with FOMO Labs or Pump.fun</span>
-  <div class="right"></div>
+  <div class="right"><a class="btn sm" href="#connect" data-testid="header-cta">Get a card</a></div>
 </div></header>"""
 
 
 def _connect_html() -> str:
     return """
-<div class="grid g2">
-  <div class="card fomo" data-testid="fomo-connect"><header><h3>FOMO account</h3><span class="tag" style="border-color:var(--fomo);color:var(--fomo)">~30 seconds</span></header>
-  <div class="body">
-  <form hx-post="/fragment/connect" hx-target="#app" hx-swap="innerHTML" data-testid="fomo-connect-form">
-    <input type="hidden" name="platform" value="fomo">
-    <label><span>FOMO handle</span><input name="handle" placeholder="@yourhandle" maxlength="40" data-testid="fomo-handle-input"></label>
-    <input type="hidden" name="address"><input type="hidden" name="chain"><input type="hidden" name="signature">
-    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
-      <button class="btn fomo" type="button" data-connect="evm" data-platform="fomo" data-testid="fomo-connect-evm">Connect EVM wallet</button>
-      <button class="btn fomo o" type="button" data-connect="solana" data-platform="fomo" data-testid="fomo-connect-solana">Connect Phantom</button>
-    </div>
-    <p class="hint" data-status data-testid="fomo-connect-status">Signs one message proving you own the wallet linked to your FOMO handle — no funds move.</p>
-  </form>
-  </div></div>
+<div class="card" data-testid="connect-card">
+<div class="body">
+<input type="radio" name="tab" id="tab-fomo" class="tabpick" checked>
+<input type="radio" name="tab" id="tab-pump" class="tabpick">
+<div class="tabs">
+  <label for="tab-fomo">FOMO</label>
+  <label for="tab-pump">Pump.fun</label>
+</div>
 
-  <div class="card pump" data-testid="pumpfun-connect"><header><h3>Pump.fun wallet</h3><span class="tag" style="border-color:var(--pump);color:var(--pump)">Solana only</span></header>
-  <div class="body">
-  <form hx-post="/fragment/connect" hx-target="#app" hx-swap="innerHTML" data-testid="pumpfun-connect-form">
-    <input type="hidden" name="platform" value="pumpfun">
-    <input type="hidden" name="handle" value="">
-    <input type="hidden" name="address"><input type="hidden" name="chain"><input type="hidden" name="signature">
-    <p class="hint" style="margin-top:0">Pump.fun has no separate handle — your connected wallet is the account.</p>
-    <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
-      <button class="btn pump" type="button" data-connect="solana" data-platform="pumpfun" data-testid="pumpfun-connect-solana">Connect Phantom</button>
-    </div>
-    <p class="hint" data-status data-testid="pumpfun-connect-status">Signs one message proving you own this wallet — no funds move.</p>
-  </form>
-  </div></div>
-</div>"""
+<div class="tabpane fomo" data-testid="fomo-connect">
+<form hx-post="/fragment/connect" hx-target="#app" hx-swap="innerHTML" data-testid="fomo-connect-form">
+  <input type="hidden" name="platform" value="fomo">
+  <label><span>FOMO handle</span><input name="handle" placeholder="@yourhandle" maxlength="40" data-testid="fomo-handle-input"></label>
+  <input type="hidden" name="address"><input type="hidden" name="chain"><input type="hidden" name="signature">
+  <button class="btn fomo full" type="button" data-connect="solana" data-platform="fomo" data-testid="fomo-connect-solana" style="margin-top:16px">Connect &amp; sign →</button>
+  <div style="display:flex;gap:10px;margin-top:8px">
+    <button class="btn fomo o sm" type="button" data-connect="evm" data-platform="fomo" data-testid="fomo-connect-evm">or connect an EVM wallet instead</button>
+  </div>
+  <p class="hint" data-status data-testid="fomo-connect-status">Non-custodial · sign a message, we never see your keys · resolves your linked wallets via fomoapi.io.</p>
+</form>
+</div>
+
+<div class="tabpane pump" data-testid="pumpfun-connect">
+<form hx-post="/fragment/connect" hx-target="#app" hx-swap="innerHTML" data-testid="pumpfun-connect-form">
+  <input type="hidden" name="platform" value="pumpfun">
+  <input type="hidden" name="handle" value="">
+  <input type="hidden" name="address"><input type="hidden" name="chain"><input type="hidden" name="signature">
+  <button class="btn pump full" type="button" data-connect="solana" data-platform="pumpfun" data-testid="pumpfun-connect-solana">Connect Phantom →</button>
+  <p class="hint" data-status data-testid="pumpfun-connect-status">Non-custodial · no handle to type — your connected wallet is the account.</p>
+</form>
+</div>
+</div></div>"""
 
 
 def _card_action_form(cid: str, platform: str, identity: str, action: str, label: str, testid: str) -> str:
@@ -266,6 +309,11 @@ async def _card_html(card: dict, platform: str, identity: str) -> str:
   <div class="brand">{esc(card.get('brand', 'Visa'))}{' · DEMO' if card.get('demo') else ''}</div>
   <div class="pan">•••• •••• •••• {esc(card.get('last4', '••••'))}</div>
   <div class="row"><span>exp {esc(card.get('expiry', '--/--'))}</span><span>{esc(status).upper()}</span></div>
+</div>
+<div class="sim" data-testid="card-simulator">
+  <div><div class="merch">💳</div><div class="lbl">your card</div></div>
+  <div class="arrow">→</div>
+  <div><div class="merch">🍔</div><div class="lbl">tap to pay</div></div>
 </div>
 <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
   {_card_action_form(cid, platform, identity, 'reveal', 'Reveal PAN (once)', 'reveal-btn')}
@@ -360,24 +408,68 @@ async def page():
 <body>
 <div id="sc">
 {_bar()}
-<section style="padding-top:48px"><div class="w"><div class="grid" style="grid-template-columns:1fr;gap:32px">
+<section style="padding-top:44px"><div class="w"><div class="grid" style="grid-template-columns:1fr;gap:36px">
   <div>
     <span class="kick">Social Cash</span>
-    <h1>The facilitator for spending your social trading cash.</h1>
+    <h1>Trading balance. <em>Spendable.</em></h1>
     <p class="lede">Connect a FOMO handle or a Pump.fun wallet, move some balance onto a card, and spend it — online or with Apple Pay / Google Pay. No KYC on the starter tier.</p>
     <div class="platforms"><span class="ptag fomo">FOMO</span><span class="ptag pump">PUMP.FUN</span></div>
+    <div class="stats">
+      <span>NO WIRE</span><span>NO BANK HOLD</span><span>NO OFF-RAMP</span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:26px">
+      <a class="btn o sm" href="#how" data-testid="how-it-works-cta">How it works ↗</a>
+      <a class="btn o sm" href="https://github.com/splashg22/fomo-card" target="_blank" rel="noreferrer" data-testid="source-cta">View the code ↗</a>
+    </div>
   </div>
-  <div id="app" data-testid="app">{_connect_html()}</div>
+  <div id="app" data-testid="app" style="max-width:440px" data-anchor="connect"><a id="connect"></a>{_connect_html()}</div>
 </div></div></section>
 
-<section id="how"><div class="w"><span class="kick">How it works</span><h2>Three steps.</h2>
+<section id="how"><div class="w"><span class="kick">The flow</span><h2>Four steps. Under two minutes.</h2>
+  <p class="lede" style="font-size:15px">From a FOMO handle or a Pump.fun wallet to a card you can tap — start to finish, faster than the coffee behind it brews.</p>
   <div class="steps">
-    <div class="step"><div class="n">1</div><div class="t">Connect</div><div class="d">Sign one message with your wallet. FOMO resolves your handle through fomoapi.io; Pump.fun just uses the wallet you connect.</div></div>
-    <div class="step"><div class="n">2</div><div class="t">Load</div><div class="d">Pick an amount and send USDC/SOL/USDT straight to the card issuer's deposit address — never to us. We watch for confirmation.</div></div>
-    <div class="step"><div class="n">3</div><div class="t">Spend</div><div class="d">Once it lands, your card is funded. Add it to Apple Pay or Google Pay, or use the number online. Real limits apply on the no-KYC tier.</div></div>
+    <div class="step"><span class="go-arrow">↗</span><div class="n">01</div><div class="t">Pick your account</div><div class="d">A FOMO handle (we resolve it via fomoapi.io) or a Pump.fun wallet (no handle needed — it's already the account).</div></div>
+    <div class="step"><span class="go-arrow">↗</span><div class="n">02</div><div class="t">Sign one message</div><div class="d">Proves wallet ownership. No seed phrase, no email, no ID, no password.</div></div>
+    <div class="step"><span class="go-arrow">↗</span><div class="n">03</div><div class="t">Send USDC/SOL</div><div class="d">Straight to the card issuer's own deposit address — never to us. Confirmation lands in seconds.</div></div>
+    <div class="step"><span class="go-arrow">↗</span><div class="n">04</div><div class="t">Tap anywhere</div><div class="d">We fund a virtual Visa with an Apple/Google Pay provisioning token. Spend it now.</div></div>
   </div></div></section>
 
-<section id="faq"><div class="w"><span class="kick">FAQ</span><h2>Questions</h2><div style="margin-top:18px;border-top:1px solid var(--line)">{faq}</div></div></section>
+<section><div class="w">
+  <span class="kick">The old way</span>
+  <h2>Cash-out used to take days. Now it's one signature.</h2>
+  <div class="compare">
+    <div class="old">
+      <span class="kick">the old way</span>
+      <div class="flowline">sell → wire → bank hold → wait → spend</div>
+      <div class="oldmeta">3–5 business days · KYC · slippage · middlemen</div>
+    </div>
+    <div class="new">
+      <span class="kick">social cash</span>
+      <div class="flowbig">connect → <em>paid.</em></div>
+      <div class="newmeta">no KYC · no bank hold · one signature</div>
+    </div>
+  </div>
+  <div class="ticker" data-testid="activity-ticker">
+    <span class="kick" style="color:var(--ink3)">EXAMPLE ACTIVITY (ILLUSTRATIVE, NOT LIVE)</span><span class="dot"></span>
+    <b>@poorgoat_</b> loaded $60 on FOMO<span class="dot"></span>
+    <b>@degen.sol</b> loaded $500 on Pump.fun<span class="dot"></span>
+    <b>@ether_monk</b> tapped at a coffee shop<span class="dot"></span>
+    <b>@0xship</b> loaded $120 on FOMO
+  </div>
+</div></section>
+
+<section><div class="w">
+  <span class="kick">Where it spends</span>
+  <h2>Anywhere Visa works.</h2>
+  <p class="lede" style="font-size:15px">It's a real virtual Visa on a real card network — not a partner-merchant list. These are just familiar examples.</p>
+  <div class="merchants">
+    <span class="mchip">🍔 McDonald's</span><span class="mchip">☕ Starbucks</span><span class="mchip">🚗 Uber</span>
+    <span class="mchip">⛽ Shell</span><span class="mchip">📦 Amazon</span><span class="mchip">🌯 Chipotle</span>
+    <span class="mchip">🍎 Apple</span><span class="mchip">+ millions more</span>
+  </div>
+</div></section>
+
+<section id="faq"><div class="w"><span class="kick">FAQ</span><h2>Questions</h2><div style="margin-top:18px;border-top:1px solid var(--cardline)">{faq}</div></div></section>
 
 <footer><div class="w"><div>Social Cash · the facilitator for spending your social trading cash</div>
 <div class="ln"><a href="https://github.com/splashg22/fomo-card" target="_blank" rel="noreferrer">Source on GitHub</a>

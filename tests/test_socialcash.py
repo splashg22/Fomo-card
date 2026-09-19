@@ -158,4 +158,4 @@ class TestSite:
         assert r.status_code == 200
         assert "Social Cash" in r.text
         assert "not affiliated with FOMO Labs or Pump.fun" in r.text
-        assert "Pump.fun wallet" in r.text and "FOMO account" in r.text
+        assert 'data-testid="fomo-connect"' in r.text and 'data-testid="pumpfun-connect"' in r.text
