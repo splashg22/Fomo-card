@@ -31,28 +31,34 @@ def short(addr: str) -> str:
 
 CSS = """
 <style>
-#sc{--bg:#111214;--bg2:#17181b;--card:#1a1b1e;--ink:#e7e7ea;--ink2:#96979c;--ink3:#68696e;--line:#2a2b2f;
---accent:#8a9a90;--bad:#b97575;--good:#7f9e88;
+#sc{--bg:#0b0c0a;--bg2:#141613;--card:#171915;--ink:#eef1ec;--ink2:#9aa39c;--ink3:#666e68;--line:#262a24;
+--pump:#00e676;--fomo:#ff5a36;--accent:var(--pump);--bad:#ff5c5c;--good:var(--pump);
 --head:"Archivo","Space Grotesk",sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--sans:Inter,-apple-system,system-ui,sans-serif;
 background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;min-height:100vh}
 #sc *{box-sizing:border-box}
-#sc ::selection{background:var(--accent);color:#111214}
-#sc a{color:var(--accent);text-decoration:none}
+#sc ::selection{background:var(--pump);color:#0b0c0a}
+#sc a{color:var(--pump);text-decoration:none}
 #sc .w{max-width:1080px;margin:0 auto;padding:0 24px}
-#sc .bar{position:sticky;top:0;z-index:40;background:rgba(17,18,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+#sc .bar{position:sticky;top:0;z-index:40;background:rgba(11,12,10,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 #sc .bar-in{display:flex;align-items:center;gap:20px;padding:16px 24px;max-width:1200px;margin:0 auto}
-#sc .mk{font-family:var(--head);font-weight:600;font-size:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;color:var(--ink)}
-#sc .mk i{width:24px;height:24px;background:var(--bg2);border:1px solid var(--line);border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--ink2);font-style:normal}
+#sc .mk{font-family:var(--head);font-weight:700;font-size:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;color:var(--ink)}
+#sc .mk i{width:26px;height:26px;background:linear-gradient(135deg,var(--pump),var(--fomo));border-radius:7px;display:grid;place-items:center;font-size:12px;font-weight:800;color:#0b0c0a;font-style:normal}
 #sc .right{margin-left:auto}
 #sc .badge{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:var(--bg2)}
 #sc section{padding:56px 0;position:relative;z-index:1}
 #sc .kick{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
-#sc h1{font-family:var(--head);font-size:clamp(30px,4.4vw,48px);line-height:1.08;margin:14px 0 0;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
-#sc h2{font-family:var(--head);font-size:clamp(22px,2.6vw,28px);margin:0 0 20px;font-weight:600;letter-spacing:-.01em}
+#sc .platforms{display:inline-flex;gap:8px;margin-top:14px}
+#sc .ptag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;border:1px solid;border-radius:999px;padding:4px 11px;font-weight:600}
+#sc .ptag.fomo{color:var(--fomo);border-color:var(--fomo)}
+#sc .ptag.pump{color:var(--pump);border-color:var(--pump)}
+#sc h1{font-family:var(--head);font-size:clamp(30px,4.4vw,48px);line-height:1.08;margin:14px 0 0;font-weight:700;letter-spacing:-.015em;color:var(--ink)}
+#sc h2{font-family:var(--head);font-size:clamp(22px,2.6vw,28px);margin:0 0 20px;font-weight:700;letter-spacing:-.01em}
 #sc p.lede{color:var(--ink2);max-width:56ch;margin:18px 0 0;font-size:17px;line-height:1.65}
 #sc .grid{display:grid;gap:20px}
 @media(min-width:900px){#sc .g2{grid-template-columns:1fr 1fr}#sc .g3{grid-template-columns:repeat(3,1fr)}}
-#sc .card{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
+#sc .card{border:1px solid var(--line);border-top:3px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
+#sc .card.fomo{border-top-color:var(--fomo)}
+#sc .card.pump{border-top-color:var(--pump)}
 #sc .card>header{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
 #sc .card>header h3{margin:0;font-family:var(--head);font-size:15px;font-weight:700}
 #sc .card .body{padding:18px}
@@ -61,10 +67,14 @@ background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;lin
 #sc input,#sc select{width:100%;margin-top:6px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-family:var(--mono);font-size:14px;padding:11px 12px;outline:none}
 #sc input:focus,#sc select:focus{border-color:var(--accent)}
 #sc .hint{font-size:13px;color:var(--ink3);margin-top:8px;line-height:1.6}
-#sc .btn{font-family:var(--head);font-weight:600;font-size:14px;padding:11px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#12130f;cursor:pointer;transition:opacity .15s}
+#sc .btn{font-family:var(--head);font-weight:700;font-size:14px;padding:11px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#0b0c0a;cursor:pointer;transition:opacity .15s,transform .1s}
 #sc .btn:hover{opacity:.88}
-#sc .btn:active{opacity:.75}
+#sc .btn:active{opacity:.75;transform:scale(.98)}
 #sc .btn.o{background:transparent;border-color:var(--line);color:var(--ink)}
+#sc .btn.fomo{background:var(--fomo);border-color:var(--fomo);color:#1a0800}
+#sc .btn.fomo.o{background:transparent;color:var(--fomo)}
+#sc .btn.pump{background:var(--pump);border-color:var(--pump);color:#04140a}
+#sc .btn.pump.o{background:transparent;color:var(--pump)}
 #sc .btn.sm{padding:7px 12px;font-size:12px}
 #sc .btn[disabled]{opacity:.4;cursor:default}
 #sc .amts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
@@ -84,6 +94,7 @@ background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;lin
 #sc .panel .big{font-family:var(--head);font-weight:600;font-size:19px;letter-spacing:-.01em}
 #sc pre{margin:10px 0 0;font-family:var(--mono);font-size:12px;line-height:1.7;white-space:pre-wrap;word-break:break-word;color:var(--ink2);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;max-height:260px;overflow:auto}
 #sc .cc{border-radius:14px;padding:22px;background:var(--bg2);border:1px solid var(--line);position:relative;overflow:hidden;max-width:360px}
+#sc .cc:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--fomo),var(--pump))}
 #sc .cc .brand{font-family:var(--head);font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
 #sc .cc .pan{font-family:var(--mono);font-size:20px;letter-spacing:.12em;margin-top:34px;color:var(--ink)}
 #sc .cc .row{display:flex;justify-content:space-between;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--ink2)}
@@ -208,21 +219,21 @@ def _bar() -> str:
 def _connect_html() -> str:
     return """
 <div class="grid g2">
-  <div class="card" data-testid="fomo-connect"><header><h3>FOMO account</h3><span class="tag">~30 seconds</span></header>
+  <div class="card fomo" data-testid="fomo-connect"><header><h3>FOMO account</h3><span class="tag" style="border-color:var(--fomo);color:var(--fomo)">~30 seconds</span></header>
   <div class="body">
   <form hx-post="/fragment/connect" hx-target="#app" hx-swap="innerHTML" data-testid="fomo-connect-form">
     <input type="hidden" name="platform" value="fomo">
     <label><span>FOMO handle</span><input name="handle" placeholder="@yourhandle" maxlength="40" data-testid="fomo-handle-input"></label>
     <input type="hidden" name="address"><input type="hidden" name="chain"><input type="hidden" name="signature">
     <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
-      <button class="btn" type="button" data-connect="evm" data-platform="fomo" data-testid="fomo-connect-evm">Connect EVM wallet</button>
-      <button class="btn o" type="button" data-connect="solana" data-platform="fomo" data-testid="fomo-connect-solana">Connect Phantom</button>
+      <button class="btn fomo" type="button" data-connect="evm" data-platform="fomo" data-testid="fomo-connect-evm">Connect EVM wallet</button>
+      <button class="btn fomo o" type="button" data-connect="solana" data-platform="fomo" data-testid="fomo-connect-solana">Connect Phantom</button>
     </div>
     <p class="hint" data-status data-testid="fomo-connect-status">Signs one message proving you own the wallet linked to your FOMO handle — no funds move.</p>
   </form>
   </div></div>
 
-  <div class="card" data-testid="pumpfun-connect"><header><h3>Pump.fun wallet</h3><span class="tag">Solana only</span></header>
+  <div class="card pump" data-testid="pumpfun-connect"><header><h3>Pump.fun wallet</h3><span class="tag" style="border-color:var(--pump);color:var(--pump)">Solana only</span></header>
   <div class="body">
   <form hx-post="/fragment/connect" hx-target="#app" hx-swap="innerHTML" data-testid="pumpfun-connect-form">
     <input type="hidden" name="platform" value="pumpfun">
@@ -230,7 +241,7 @@ def _connect_html() -> str:
     <input type="hidden" name="address"><input type="hidden" name="chain"><input type="hidden" name="signature">
     <p class="hint" style="margin-top:0">Pump.fun has no separate handle — your connected wallet is the account.</p>
     <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
-      <button class="btn" type="button" data-connect="solana" data-platform="pumpfun" data-testid="pumpfun-connect-solana">Connect Phantom</button>
+      <button class="btn pump" type="button" data-connect="solana" data-platform="pumpfun" data-testid="pumpfun-connect-solana">Connect Phantom</button>
     </div>
     <p class="hint" data-status data-testid="pumpfun-connect-status">Signs one message proving you own this wallet — no funds move.</p>
   </form>
@@ -239,10 +250,11 @@ def _connect_html() -> str:
 
 
 def _card_action_form(cid: str, platform: str, identity: str, action: str, label: str, testid: str) -> str:
+    tone = "fomo" if platform == "fomo" else "pump"
     return f"""<form hx-post="/fragment/card-action" hx-target="#card-out-{cid}" hx-swap="innerHTML" style="display:inline-block;margin:0">
   <input type="hidden" name="platform" value="{esc(platform)}"><input type="hidden" name="identity" value="{esc(identity)}">
   <input type="hidden" name="issuer_card_id" value="{cid}"><input type="hidden" name="action" value="{action}">
-  <button class="btn o sm" type="submit" data-testid="{testid}">{esc(label)}</button></form>"""
+  <button class="btn {tone} o sm" type="submit" data-testid="{testid}">{esc(label)}</button></form>"""
 
 
 async def _card_html(card: dict, platform: str, identity: str) -> str:
@@ -287,9 +299,11 @@ async def _dashboard_html(platform: str, identity: str) -> str:
     bal_rows = "".join(f'<span class="tag">{esc(k)}: {v:g}</span>' for k, v in (bal.get("balances") or {}).items())
     cards_html = "".join([await _card_html(c, platform, identity) for c in cards]) or '<p class="hint">No card yet — load one below.</p>'
     chain_options = '<option value="solana">Solana</option>' + ('' if platform == "pumpfun" else '<option value="evm">EVM (Base/ETH)</option>')
+    platform_css = "fomo" if platform == "fomo" else "pump"
+    platform_color = "var(--fomo)" if platform == "fomo" else "var(--pump)"
     return f"""
 <div class="grid g2">
-  <div class="card" data-testid="dashboard"><header><h3>{esc(platform_label)} · {esc(ident_display)}</h3><span class="tag">{esc(user.get('wallet_chain'))} · {esc(short(user.get('wallet_address', '')))}</span></header>
+  <div class="card {platform_css}" data-testid="dashboard"><header><h3>{esc(platform_label)} · {esc(ident_display)}</h3><span class="tag" style="border-color:{platform_color};color:{platform_color}">{esc(user.get('wallet_chain'))} · {esc(short(user.get('wallet_address', '')))}</span></header>
     <div class="body">
       <div class="hint">Linked balances{demo}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">{bal_rows}</div>
@@ -351,6 +365,7 @@ async def page():
     <span class="kick">Social Cash</span>
     <h1>The facilitator for spending your social trading cash.</h1>
     <p class="lede">Connect a FOMO handle or a Pump.fun wallet, move some balance onto a card, and spend it — online or with Apple Pay / Google Pay. No KYC on the starter tier.</p>
+    <div class="platforms"><span class="ptag fomo">FOMO</span><span class="ptag pump">PUMP.FUN</span></div>
   </div>
   <div id="app" data-testid="app">{_connect_html()}</div>
 </div></div></section>
