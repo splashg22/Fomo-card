@@ -289,17 +289,31 @@ async def health():
     return {"ok": True, "issuer": get_issuer().name}
 
 
+PAGE_TITLE = "FOMO Card"
+PAGE_DESCRIPTION = ("FOMO Card is the facilitator for spending your FOMO cash — connect your FOMO "
+                    "wallet, load a card, and spend it in real life. Independent, not affiliated with FOMO Labs.")
+
+
 @router.get("/", response_class=HTMLResponse)
 async def page():
     faq = "".join(f'<details{" open" if i == 0 else ""}><summary>{q}</summary><p>{a}</p></details>' for i, (q, a) in enumerate(FAQ))
-    return HTMLResponse(f"""{CSS}
+    return HTMLResponse(f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{esc(PAGE_TITLE)}</title>
+<meta name="description" content="{esc(PAGE_DESCRIPTION)}">
+{CSS}
+</head>
+<body>
 <div id="fc">
 {_bar()}
 <section style="padding-top:48px"><div class="w"><div class="grid" style="grid-template-columns:1fr;gap:32px">
   <div>
     <span class="kick">FOMO Card</span>
-    <h1>A card for your FOMO balance.</h1>
-    <p class="lede">Connect your FOMO wallet, move some balance onto a card, and spend it — online or with Apple Pay / Google Pay. No KYC on the starter tier.</p>
+    <h1>The facilitator for spending your FOMO cash.</h1>
+    <p class="lede">FOMO Card sits between your wallet and a card issuer: connect your FOMO handle, move some balance onto a card, and spend it — online or with Apple Pay / Google Pay. No KYC on the starter tier.</p>
   </div>
   <div id="fc-app" data-testid="fomocard-app">{_connect_html()}</div>
 </div></div></section>
@@ -313,14 +327,16 @@ async def page():
 
 <section id="faq"><div class="w"><span class="kick">FAQ</span><h2>Questions</h2><div style="margin-top:18px;border-top:1px solid var(--line)">{faq}</div></div></section>
 
-<footer><div class="w"><div>FOMO Card · an independent product for fomo.family traders</div>
+<footer><div class="w"><div>FOMO Card · the facilitator for spending your FOMO cash</div>
 <div class="ln"><a href="https://github.com/splashg22/fomo-card" target="_blank" rel="noreferrer">Source on GitHub</a>
 <a href="https://fomoapi.io" target="_blank" rel="noreferrer">fomoapi.io</a>
 <a href="https://cryptocardium.com" target="_blank" rel="noreferrer">Cryptocardium</a></div>
 <div class="disclaimer">{DISCLAIMER}</div></div></footer>
 </div>
 {HTMX_CDN}
-{WALLET_JS}""")
+{WALLET_JS}
+</body>
+</html>""")
 
 
 @router.get("/fragment/history", response_class=HTMLResponse)

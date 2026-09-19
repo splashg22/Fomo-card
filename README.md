@@ -1,7 +1,8 @@
 # FOMO Card
 
-An independent, unofficial spend layer for [fomo.family](https://fomo.family) traders. **Not
-affiliated with, endorsed by, or operated by FOMO Labs.**
+The facilitator for spending your FOMO cash — an independent, unofficial spend layer for
+[fomo.family](https://fomo.family) traders. **Not affiliated with, endorsed by, or operated by
+FOMO Labs.**
 
 Connect your FOMO handle, load a virtual card straight from your linked Solana or EVM wallet by
 sending USDC/SOL/USDT to a no-KYC card issuer's own deposit address, then spend it — Apple Pay,
