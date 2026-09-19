@@ -12,7 +12,9 @@ load_dotenv()
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
 DB_NAME = os.environ.get("DB_NAME", "socialcash")
 
-client = AsyncIOMotorClient(MONGO_URL)
+# A short server-selection timeout means a missing/unreachable Mongo fails in ~4s with a clear error
+# instead of motor's 30s default, which just looks like the app hung.
+client = AsyncIOMotorClient(MONGO_URL, serverSelectionTimeoutMS=4000)
 db = client[DB_NAME]
 
 

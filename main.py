@@ -11,7 +11,7 @@ from starlette.middleware.cors import CORSMiddleware
 import pages
 import socialcash
 from card_issuer import get_issuer
-from db import db
+from db import MONGO_URL, db
 
 app = FastAPI(
     title="Social Cash",
@@ -37,11 +37,18 @@ logger = logging.getLogger("socialcash")
 
 @app.on_event("startup")
 async def startup():
-    await db.socialcash_users.create_index([("platform", 1), ("identity", 1)], unique=True)
-    await db.socialcash_cards.create_index("issuer_card_id", unique=True)
-    await db.socialcash_cards.create_index([("platform", 1), ("identity", 1)])
-    await db.socialcash_topups.create_index("id", unique=True)
-    await db.socialcash_topups.create_index([("platform", 1), ("identity", 1)])
+    try:
+        await db.socialcash_users.create_index([("platform", 1), ("identity", 1)], unique=True)
+        await db.socialcash_cards.create_index("issuer_card_id", unique=True)
+        await db.socialcash_cards.create_index([("platform", 1), ("identity", 1)])
+        await db.socialcash_topups.create_index("id", unique=True)
+        await db.socialcash_topups.create_index([("platform", 1), ("identity", 1)])
+    except Exception as e:
+        raise RuntimeError(
+            f"Could not reach MongoDB at {MONGO_URL} — is it running? Start one with "
+            "`docker run -d -p 27017:27017 mongo:7`, or point MONGO_URL (in .env) at a reachable "
+            "instance, e.g. a free MongoDB Atlas cluster. See README.md > Setup."
+        ) from e
     logger.info("Social Cash up — issuer=%s", get_issuer().name)
 
 
