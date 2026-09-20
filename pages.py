@@ -384,7 +384,7 @@ async def _dashboard_html(platform: str, identity: str) -> str:
 
 PAGE_TITLE = "Social Cash"
 PAGE_DESCRIPTION = ("Social Cash is the facilitator for spending your FOMO or Pump.fun balance — connect "
-                    "your account, load a card, and spend it in real life. Independent, not affiliated "
+                    "your account and spend what's already yours, anywhere. Independent, not affiliated "
                     "with FOMO Labs or Pump.fun.")
 
 
@@ -411,8 +411,8 @@ async def page():
 <section style="padding-top:44px"><div class="w"><div class="grid" style="grid-template-columns:1fr;gap:36px">
   <div>
     <span class="kick">Social Cash</span>
-    <h1>Trading balance. <em>Spendable.</em></h1>
-    <p class="lede">Connect a FOMO handle or a Pump.fun wallet, move some balance onto a card, and spend it — online or with Apple Pay / Google Pay. No KYC on the starter tier.</p>
+    <h1>Your bag. <em>Unlocked.</em></h1>
+    <p class="lede">Connect your FOMO handle or Pump.fun wallet and spend what's already yours — anywhere, instantly, no exchange required. No KYC on the starter tier.</p>
     <div class="platforms"><span class="ptag fomo">FOMO</span><span class="ptag pump">PUMP.FUN</span></div>
     <div class="stats">
       <span>NO WIRE</span><span>NO BANK HOLD</span><span>NO OFF-RAMP</span>
@@ -431,7 +431,7 @@ async def page():
     <div class="step"><span class="go-arrow">↗</span><div class="n">01</div><div class="t">Pick your account</div><div class="d">A FOMO handle (we resolve it via fomoapi.io) or a Pump.fun wallet (no handle needed — it's already the account).</div></div>
     <div class="step"><span class="go-arrow">↗</span><div class="n">02</div><div class="t">Sign one message</div><div class="d">Proves wallet ownership. No seed phrase, no email, no ID, no password.</div></div>
     <div class="step"><span class="go-arrow">↗</span><div class="n">03</div><div class="t">Send USDC/SOL</div><div class="d">Straight to the card issuer's own deposit address — never to us. Confirmation lands in seconds.</div></div>
-    <div class="step"><span class="go-arrow">↗</span><div class="n">04</div><div class="t">Tap anywhere</div><div class="d">We fund a virtual Visa with an Apple/Google Pay provisioning token. Spend it now.</div></div>
+    <div class="step"><span class="go-arrow">↗</span><div class="n">04</div><div class="t">Tap anywhere</div><div class="d">Your balance goes live, ready to tap — Apple Pay, Google Pay, or straight from your pocket.</div></div>
   </div></div></section>
 
 <section><div class="w">
@@ -460,8 +460,8 @@ async def page():
 
 <section><div class="w">
   <span class="kick">Where it spends</span>
-  <h2>Anywhere Visa works.</h2>
-  <p class="lede" style="font-size:15px">It's a real virtual Visa on a real card network — not a partner-merchant list. These are just familiar examples.</p>
+  <h2>Anywhere tap-to-pay already works.</h2>
+  <p class="lede" style="font-size:15px">Real network, real merchants — not a partner list. These are just familiar examples.</p>
   <div class="merchants">
     <span class="mchip">🍔 McDonald's</span><span class="mchip">☕ Starbucks</span><span class="mchip">🚗 Uber</span>
     <span class="mchip">⛽ Shell</span><span class="mchip">📦 Amazon</span><span class="mchip">🌯 Chipotle</span>

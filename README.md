@@ -7,6 +7,9 @@ endorsed by, or operated by FOMO Labs or Pump.fun.**
 > Renamed from FOMO Card. If you're looking at a repo still called `fomo-card`, that's this
 > project — GitHub redirects the old name automatically once it's renamed.
 
+**Testing this with real people?** See [TESTING.md](TESTING.md) for a plain-language walkthrough —
+including exactly what's demo vs. real right now.
+
 Connect a FOMO handle or a Pump.fun wallet, load a virtual card straight from your linked wallet by
 sending USDC/SOL/USDT to a no-KYC card issuer's own deposit address, then spend it — Apple Pay,
 Google Pay, or the card number online. Social Cash is a thin, mostly-stateless layer on top of
