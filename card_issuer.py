@@ -73,7 +73,7 @@ class DemoIssuer(CardIssuer):
         return {
             "issuer_card_id": "demo_" + h[:20],
             "last4": (digits[:4] or "0000").ljust(4, "0"),
-            "brand": "Visa (Demo)",
+            "brand": "Social Cash Card (Demo)",
             "expiry": "12/29",
             "status": "active",
             "balance_usd": 0.0,
@@ -138,7 +138,7 @@ class CryptocardiumIssuer(CardIssuer):
         return {
             "issuer_card_id": data.get("id") or data.get("card_id"),
             "last4": data.get("last4"),
-            "brand": data.get("brand", "Visa"),
+            "brand": data.get("brand", "Card"),
             "expiry": data.get("expiry") or data.get("exp"),
             "status": data.get("status", "active"),
             "balance_usd": float(data.get("balance_usd") or 0),
@@ -153,7 +153,7 @@ class CryptocardiumIssuer(CardIssuer):
     async def get_card(self, issuer_card_id: str) -> dict:
         data = await self._req("GET", f"/cards/{issuer_card_id}")
         return {
-            "issuer_card_id": issuer_card_id, "last4": data.get("last4"), "brand": data.get("brand", "Visa"),
+            "issuer_card_id": issuer_card_id, "last4": data.get("last4"), "brand": data.get("brand", "Card"),
             "expiry": data.get("expiry"), "status": data.get("status"),
             "balance_usd": float(data.get("balance_usd") or 0),
         }

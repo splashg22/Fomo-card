@@ -52,16 +52,17 @@ color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;min-hei
 #sc .right{margin-left:auto;display:flex;align-items:center;gap:12px}
 #sc .badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--ink3);border:1px solid var(--cardline);border-radius:999px;padding:5px 12px;background:var(--bg2);display:none}
 @media(min-width:720px){#sc .badge{display:inline-block}}
-#sc section{padding:52px 0;position:relative;z-index:1}
+#sc section{padding:64px 0;position:relative;z-index:1}
+@media(min-width:900px){#sc section{padding:92px 0}}
 #sc .kick{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
 #sc .platforms{display:inline-flex;gap:8px;margin-top:16px}
 #sc .ptag{font-family:var(--mono);font-size:11px;letter-spacing:.05em;border:1px solid;border-radius:999px;padding:4px 11px;font-weight:600}
 #sc .ptag.fomo{color:var(--fomo);border-color:color-mix(in srgb,var(--fomo) 45%,transparent)}
 #sc .ptag.pump{color:var(--pump);border-color:color-mix(in srgb,var(--pump) 45%,transparent)}
-#sc h1{font-family:var(--head);font-size:clamp(32px,5vw,54px);line-height:1.05;margin:16px 0 0;font-weight:800;letter-spacing:-.02em;color:var(--ink);text-wrap:balance}
+#sc h1{font-family:var(--head);font-size:clamp(36px,6vw,64px);line-height:1.02;margin:20px 0 0;font-weight:800;letter-spacing:-.03em;color:var(--ink);text-wrap:balance}
 #sc h1 em{font-style:normal;color:var(--accent2)}
-#sc h2{font-family:var(--head);font-size:clamp(23px,2.8vw,30px);margin:0 0 8px;font-weight:800;letter-spacing:-.015em}
-#sc p.lede{color:var(--ink2);max-width:52ch;margin:16px 0 0;font-size:17px;line-height:1.65}
+#sc h2{font-family:var(--head);font-size:clamp(25px,3.2vw,36px);margin:0 0 8px;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+#sc p.lede{color:var(--ink2);max-width:56ch;margin:18px 0 0;font-size:18px;line-height:1.7}
 #sc .stats{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px}
 #sc .stats span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding-left:14px;border-left:2px solid var(--cardline)}
 #sc .grid{display:grid;gap:20px}
@@ -136,14 +137,11 @@ color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;min-hei
 #sc .compare .oldmeta{font-family:var(--mono);font-size:12px;color:var(--ink3);margin-top:14px}
 #sc .compare .new{background:linear-gradient(155deg,rgba(109,110,247,.14),rgba(0,230,118,.06))}
 #sc .compare .new .kick{color:var(--accent2)}
-#sc .compare .flowbig{font-family:var(--head);font-weight:800;font-size:26px;margin-top:10px}
+#sc .compare .flowbig{font-family:var(--head);font-weight:800;font-size:clamp(24px,3.4vw,32px);margin-top:10px;letter-spacing:-.015em}
 #sc .compare .flowbig em{font-style:normal;color:var(--accent2)}
 #sc .compare .newmeta{font-family:var(--mono);font-size:12px;color:var(--ink2);margin-top:14px}
-#sc .ticker{border:1px solid var(--cardline);border-radius:999px;background:var(--bg2);padding:14px 22px;margin-top:24px;overflow-x:auto;white-space:nowrap;font-family:var(--mono);font-size:12.5px;color:var(--ink2)}
-#sc .ticker b{color:var(--ink)}
-#sc .ticker .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin:0 14px;vertical-align:middle}
-#sc .merchants{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
-#sc .mchip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--cardline);border-radius:999px;padding:8px 14px;background:var(--card);font-size:13px;color:var(--ink2)}
+#sc .statement h2{font-size:clamp(28px,4.4vw,46px);line-height:1.15;max-width:18ch}
+#sc .statement em{font-style:normal;color:var(--accent2)}
 #sc details{border-bottom:1px solid var(--cardline)}
 #sc summary{padding:16px 2px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:14px;font-family:var(--head);font-size:16px;font-weight:700}
 #sc summary::-webkit-details-marker{display:none}
@@ -306,14 +304,14 @@ async def _card_html(card: dict, platform: str, identity: str) -> str:
     freeze_action, freeze_label = ("unfreeze", "Unfreeze") if status == "frozen" else ("freeze", "Freeze")
     return f"""
 <div class="cc" data-testid="card-{cid}">
-  <div class="brand">{esc(card.get('brand', 'Visa'))}{' · DEMO' if card.get('demo') else ''}</div>
+  <div class="brand">{esc(card.get('brand', 'Card'))}{' · DEMO' if card.get('demo') else ''}</div>
   <div class="pan">•••• •••• •••• {esc(card.get('last4', '••••'))}</div>
   <div class="row"><span>exp {esc(card.get('expiry', '--/--'))}</span><span>{esc(status).upper()}</span></div>
 </div>
 <div class="sim" data-testid="card-simulator">
   <div><div class="merch">💳</div><div class="lbl">your card</div></div>
   <div class="arrow">→</div>
-  <div><div class="merch">🍔</div><div class="lbl">tap to pay</div></div>
+  <div><div class="merch">📡</div><div class="lbl">tap to pay</div></div>
 </div>
 <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
   {_card_action_form(cid, platform, identity, 'reveal', 'Reveal PAN (once)', 'reveal-btn')}
@@ -412,7 +410,7 @@ async def page():
   <div>
     <span class="kick">Social Cash</span>
     <h1>Your bag. <em>Unlocked.</em></h1>
-    <p class="lede">Connect your FOMO handle or Pump.fun wallet and spend what's already yours — anywhere, instantly, no exchange required. No KYC on the starter tier.</p>
+    <p class="lede">Connect your FOMO handle or Pump.fun wallet and spend the on-chain money that's already yours — anywhere, instantly, with no exchange, no wire, and no bank standing in between. No KYC on the starter tier.</p>
     <div class="platforms"><span class="ptag fomo">FOMO</span><span class="ptag pump">PUMP.FUN</span></div>
     <div class="stats">
       <span>NO WIRE</span><span>NO BANK HOLD</span><span>NO OFF-RAMP</span>
@@ -434,6 +432,12 @@ async def page():
     <div class="step"><span class="go-arrow">↗</span><div class="n">04</div><div class="t">Tap anywhere</div><div class="d">Your balance goes live, ready to tap — Apple Pay, Google Pay, or straight from your pocket.</div></div>
   </div></div></section>
 
+<section class="statement"><div class="w">
+  <span class="kick">The idea</span>
+  <h2>On-chain money doesn't need a translator.</h2>
+  <p class="lede" style="font-size:19px">FOMO and Pump.fun already turned crypto into something social — a balance you check like a feed, not a brokerage statement. Social Cash is the missing link: what's sitting in your wallet becomes something you can spend the same day, without a centralized exchange standing in between.</p>
+</div></section>
+
 <section><div class="w">
   <span class="kick">The old way</span>
   <h2>Cash-out used to take days. Now it's one signature.</h2>
@@ -448,24 +452,6 @@ async def page():
       <div class="flowbig">connect → <em>paid.</em></div>
       <div class="newmeta">no KYC · no bank hold · one signature</div>
     </div>
-  </div>
-  <div class="ticker" data-testid="activity-ticker">
-    <span class="kick" style="color:var(--ink3)">EXAMPLE ACTIVITY (ILLUSTRATIVE, NOT LIVE)</span><span class="dot"></span>
-    <b>@poorgoat_</b> loaded $60 on FOMO<span class="dot"></span>
-    <b>@degen.sol</b> loaded $500 on Pump.fun<span class="dot"></span>
-    <b>@ether_monk</b> tapped at a coffee shop<span class="dot"></span>
-    <b>@0xship</b> loaded $120 on FOMO
-  </div>
-</div></section>
-
-<section><div class="w">
-  <span class="kick">Where it spends</span>
-  <h2>Anywhere tap-to-pay already works.</h2>
-  <p class="lede" style="font-size:15px">Real network, real merchants — not a partner list. These are just familiar examples.</p>
-  <div class="merchants">
-    <span class="mchip">🍔 McDonald's</span><span class="mchip">☕ Starbucks</span><span class="mchip">🚗 Uber</span>
-    <span class="mchip">⛽ Shell</span><span class="mchip">📦 Amazon</span><span class="mchip">🌯 Chipotle</span>
-    <span class="mchip">🍎 Apple</span><span class="mchip">+ millions more</span>
   </div>
 </div></section>
 

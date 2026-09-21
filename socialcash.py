@@ -59,6 +59,13 @@ def _clean_handle(h: str) -> str:
     return (h or "").strip().lstrip("@").lower()
 
 
+def _display_handle(h: str) -> str:
+    """Same cleanup as _clean_handle but case-preserved — the wallet-connect JS signs the message
+    using the handle exactly as typed, so verification must build the same string, not the
+    lowercased identity used for storage/dedup."""
+    return (h or "").strip().lstrip("@")
+
+
 def _norm_wallet(address: str, chain: str) -> str:
     a = (address or "").strip()
     return a.lower() if chain == "evm" else a  # Solana addresses are base58 and case-sensitive
@@ -166,7 +173,8 @@ async def connect(body: ConnectRequest):
     identity = identity_for(body.platform, body.handle, address)
     if _rate_limited(f"connect:{body.platform}:{identity}", 10, 60):
         raise HTTPException(429, "too many connect attempts — try again in a minute")
-    message = connect_message(body.platform, identity, address)
+    message_identity = _display_handle(body.handle) if body.platform == "fomo" else identity
+    message = connect_message(body.platform, message_identity, address)
     if not verify_wallet_signature(body.chain, address, message, body.signature):
         raise HTTPException(401, "signature does not match — sign exactly: " + message)
 
