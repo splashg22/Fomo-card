@@ -217,6 +217,8 @@ async def create_topup(body: TopupRequest):
         raise HTTPException(404, "connect this account first")
     if _rate_limited(f"topup:{body.platform}:{identity}", 6, 60):
         raise HTTPException(429, "too many top-up attempts — try again in a minute")
+    if body.platform == "pumpfun" and body.chain != "solana":
+        raise HTTPException(422, "Pump.fun is Solana-only — send from a Solana wallet")
     asset = body.asset.strip().upper()
     if asset not in SUPPORTED_ASSETS:
         raise HTTPException(422, f"unsupported asset — use one of {sorted(SUPPORTED_ASSETS)}")
@@ -261,9 +263,11 @@ async def confirm_topup(topup_id: str, body: ConfirmRequest):
     if _rate_limited(f"confirm:{platform}:{identity}", 10, 60):
         raise HTTPException(429, "too many confirm attempts — try again in a minute")
 
-    confirmed = await onchain.tx_confirmed(topup["chain"], body.tx_hash)
     issuer = get_issuer()
     demo_mode = issuer.name == "demo"
+    # Demo transactions never exist on a real chain, so skip the RPC round-trip entirely instead of
+    # waiting on a public node just to have the result ignored a few lines down.
+    confirmed = None if demo_mode else await onchain.tx_confirmed(topup["chain"], body.tx_hash)
     if confirmed is False:
         raise HTTPException(400, "that transaction was not found or failed on-chain")
     if confirmed is None and not demo_mode:
@@ -287,10 +291,18 @@ async def confirm_topup(topup_id: str, body: ConfirmRequest):
     except IssuerError as e:
         raise HTTPException(502, f"issuer funding failed: {e}")
 
-    await db.socialcash_cards.update_one(
-        {"issuer_card_id": card["issuer_card_id"]},
-        {"$inc": {"balance_usd": topup["amount_usd"]}, "$set": {"status": "active", "updated_at": utcnow_iso()}},
-    )
+    # Prefer the issuer's own reported balance when it gives one — it's the source of truth for real
+    # money. Only fall back to incrementing by the top-up amount (the demo issuer reports no balance).
+    if funded.get("balance_usd") is not None:
+        await db.socialcash_cards.update_one(
+            {"issuer_card_id": card["issuer_card_id"]},
+            {"$set": {"balance_usd": funded["balance_usd"], "status": "active", "updated_at": utcnow_iso()}},
+        )
+    else:
+        await db.socialcash_cards.update_one(
+            {"issuer_card_id": card["issuer_card_id"]},
+            {"$inc": {"balance_usd": topup["amount_usd"]}, "$set": {"status": "active", "updated_at": utcnow_iso()}},
+        )
     await db.socialcash_topups.update_one(
         {"id": topup_id}, {"$set": {"tx_hash": body.tx_hash, "status": "funded", "updated_at": utcnow_iso()}})
     card = await db.socialcash_cards.find_one({"issuer_card_id": card["issuer_card_id"]}, {"_id": 0, "pan": 0, "cvv": 0})
@@ -366,14 +378,14 @@ async def _provision(issuer_card_id: str, platform: str, identity: str, wallet: 
         raise HTTPException(502, f"issuer request failed: {e}")
 
 
-@router.get("/cards/{issuer_card_id}/apple-pay")
-async def apple_pay(issuer_card_id: str, platform: str, identity: str):
-    return await _provision(issuer_card_id, platform, identity, "apple-pay")
+@router.post("/cards/{issuer_card_id}/apple-pay")
+async def apple_pay(issuer_card_id: str, body: IdentityOnly):
+    return await _provision(issuer_card_id, body.platform, body.identity, "apple-pay")
 
 
-@router.get("/cards/{issuer_card_id}/google-pay")
-async def google_pay(issuer_card_id: str, platform: str, identity: str):
-    return await _provision(issuer_card_id, platform, identity, "google-pay")
+@router.post("/cards/{issuer_card_id}/google-pay")
+async def google_pay(issuer_card_id: str, body: IdentityOnly):
+    return await _provision(issuer_card_id, body.platform, body.identity, "google-pay")
 
 
 @router.post("/webhooks/{issuer_name}")

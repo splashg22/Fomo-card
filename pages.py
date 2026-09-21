@@ -537,7 +537,8 @@ async def fragment_card_action(platform: str = Form(""), identity: str = Form(""
                        else sc.unfreeze_card(issuer_card_id, sc.IdentityOnly(platform=platform, identity=identity)))
             return HTMLResponse(f'<div class="panel go flash"><div class="big">Card {esc(r["status"])}</div></div>')
         if action in ("apple-pay", "google-pay"):
-            r = await (sc.apple_pay(issuer_card_id, platform, identity) if action == "apple-pay" else sc.google_pay(issuer_card_id, platform, identity))
+            ident_body = sc.IdentityOnly(platform=platform, identity=identity)
+            r = await (sc.apple_pay(issuer_card_id, ident_body) if action == "apple-pay" else sc.google_pay(issuer_card_id, ident_body))
             return HTMLResponse(f'<div class="panel {"go" if r.get("provisioned") else "warn"} flash">'
                                  f'<div class="big">{"Provisioned" if r.get("provisioned") else "Not available yet"}</div>'
                                  f'<p class="hint">{esc(r.get("note", "Check your wallet app to finish adding the card."))}</p></div>')

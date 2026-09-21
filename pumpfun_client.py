@@ -4,6 +4,7 @@ there's no handle resolution here, just a live read of that wallet's spendable b
 straight from a public Solana RPC. No API key required, and no demo fallback needed either — a
 failed RPC just reports zero rather than guessing at fake data.
 """
+import asyncio
 import os
 
 import httpx
@@ -47,6 +48,6 @@ async def usdc_balance(address: str) -> float:
 
 async def get_balances(wallet_address: str) -> dict:
     """The wallet address itself is both the identity and the thing we read — no handle involved."""
-    sol, usdc = await sol_balance(wallet_address), await usdc_balance(wallet_address)
+    sol, usdc = await asyncio.gather(sol_balance(wallet_address), usdc_balance(wallet_address))
     return {"wallet": wallet_address, "demo": False, "balances": {"SOL": sol, "USDC": usdc},
             "usd_value": None, "live": True}

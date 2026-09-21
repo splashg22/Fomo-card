@@ -25,7 +25,10 @@ app.include_router(pages.router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
+    # No cookies/sessions anywhere in this app — every write is authenticated per-request by a wallet
+    # signature — so there's no credentialed state for allow_credentials to protect, and pairing it
+    # with a wildcard origin is a combination browsers themselves reject as insecure.
+    allow_credentials=False,
     allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
     allow_methods=["*"],
     allow_headers=["*"],
