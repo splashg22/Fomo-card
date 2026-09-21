@@ -113,7 +113,7 @@ color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;min-hei
 #sc .cc{border-radius:18px;padding:22px;background:linear-gradient(155deg,#15141f,#0b0b12);border:1px solid var(--cardline);position:relative;overflow:hidden;max-width:340px}
 #sc .cc:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--fomo),var(--accent),var(--pump))}
 #sc .cc .brand{font-family:var(--head);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
-#sc .cc .pan{font-family:var(--mono);font-size:19px;letter-spacing:.1em;margin-top:32px;color:var(--ink)}
+#sc .cc .pan{font-family:var(--mono);font-size:19px;letter-spacing:.1em;margin-top:32px;color:var(--ink);font-variant-numeric:tabular-nums}
 #sc .cc .row{display:flex;justify-content:space-between;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--ink2)}
 #sc .sim{display:flex;align-items:center;gap:14px;margin-top:18px}
 #sc .sim .arrow{color:var(--ink3);font-size:18px}
